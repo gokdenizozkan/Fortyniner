@@ -1,5 +1,3 @@
-package patikaplus.week3.fortyniner;
-
 public class Radar {
     static int[][] directions = { // No dictionary required, for Radar only cares about deathspot counts, not where the deathspot is.
             { 1, 0 },   // North
@@ -25,7 +23,7 @@ public class Radar {
         return deathspotCount;
     }
 
-    private static Tile[] getNeighbourTiles(Tile origin) {
+    protected static Tile[] getNeighbourTiles(Tile origin) {
         int[][] neighbourCoordinates = new int[8][2];
 
         for (int i = 0; i < 8; i++) {
@@ -36,7 +34,8 @@ public class Radar {
 
         return Board.getTilesInBulk(neighbourCoordinates);
     }
-
+    
+    
     // Checks if the given coords located on the board.
     public static boolean isOnBoard(int coordRow, int coordColumn) {
         return coordRow >= 0 && coordRow < Board.getRowCount() && coordColumn >= 0 && coordColumn < Board.getColumnCount();

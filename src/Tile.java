@@ -1,5 +1,3 @@
-package patikaplus.week3.fortyniner;
-
 public class Tile {
     private final int row;
     private final int column;
@@ -13,13 +11,26 @@ public class Tile {
         this.visual = '-';
     }
 
-    public void reveal() {
-        updateVisual();
-        GameLogic.checkEnd(deathspot);
+    public boolean reveal() {
+    	this.revealed = true;
+        this.updateVisual();
+        Board.incrementRevealedTileCount();
+        if (visual == ' ') revealPlainTileChain();
+        return this.deathspot;
     }
 
     public void revealPlainTileChain() {
-        // TODO
+    	Tile[] neighbourTiles = Radar.getNeighbourTiles(this);
+
+        for (Tile tile : neighbourTiles) {
+            if (tile == null) continue; // Null check
+            if (tile.revealed == false && Radar.countNeighbouringDeathspots(tile) == 0) {
+            	tile.revealed = true;
+            	tile.updateVisual();
+            	Board.incrementRevealedTileCount();
+            	tile.revealPlainTileChain();
+            }
+        }
     }
 
     private void updateVisual() {
