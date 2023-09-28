@@ -2,7 +2,7 @@ package com.gokdenizozkan.util;
 
 import java.util.Scanner;
 
-public class Input <T> extends Object {
+public class Input {
     private static Scanner sc;
 
     // Initializes class attributes (like Scanner sc)
