@@ -42,7 +42,7 @@ public class Board {
     }
 
     // Generation methods
-    protected static void generateBoard(boolean initializeWithDeathspots) {
+    private static void generateBoard(boolean initializeWithDeathspots) {
     	// init board
     	board = new Tile[rowCount][columnCount];
     	

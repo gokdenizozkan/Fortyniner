@@ -11,7 +11,7 @@ public class Tile {
         this.visual = '-';
     }
 
-    public boolean reveal() {
+    protected boolean reveal() {
     	this.revealed = true;
         this.updateVisual();
         Board.incrementRevealedTileCount();
@@ -19,16 +19,17 @@ public class Tile {
         return this.deathspot;
     }
 
-    public void revealPlainTileChain() {
+    private void revealPlainTileChain() {
     	Tile[] neighbourTiles = Radar.getNeighbourTiles(this);
 
         for (Tile tile : neighbourTiles) {
             if (tile == null) continue; // Null check
-            if (tile.revealed == false && Radar.countNeighbouringDeathspots(tile) == 0) {
+            if (tile.revealed) continue;
+            else {
             	tile.revealed = true;
             	tile.updateVisual();
             	Board.incrementRevealedTileCount();
-            	tile.revealPlainTileChain();
+            	if (Radar.countNeighbouringDeathspots(tile) == 0) tile.revealPlainTileChain();
             }
         }
     }
@@ -44,27 +45,27 @@ public class Tile {
 
     // Getters and Setters
 
-    public int getRow() {
+    protected int getRow() {
         return row;
     }
 
-    public int getColumn() {
+    protected int getColumn() {
         return column;
     }
 
-    public int getNeighbouringDeathspots() {
+    protected int getNeighbouringDeathspots() {
         return Radar.countNeighbouringDeathspots(this);
     }
 
-    public boolean isDeathspot() {
+    protected boolean isDeathspot() {
         return deathspot;
     }
 
-    public void setDeathspot(boolean deathspot) {
+    protected void setDeathspot(boolean deathspot) {
         this.deathspot = deathspot;
     }
 
-    public char getVisual() {
+    protected char getVisual() {
         return visual;
     }
 }
