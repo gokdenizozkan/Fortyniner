@@ -1,22 +1,23 @@
-# Fortyniner 
-### A text-based video game inspired by Minesweeper.
+# Minesweeper clones
+In the src/ folder, you may find two versions of my Minesweeper clones.
 
-## Features
-- GAMEMODES! You can create your own board or select pre-made ones!
-- REVEAL CHAIN! If you reveal a tile, and it has no deathspots around it, all neighbouring "plain tiles" will reveal themselves.
-- TRUELY RANDOM! No matter what you choose as a side, your board will have truely random deathspot placements!
-- DIFFICULTIES! You can adjust the difficulty to your liking! Less deathspots or ultimate death?
+## Fortyniner
+Fortyniner is a truely feature-wise clone of Minesweeper. It is more complex and it offers more scalability compared to the other project.
 
-## How it works
-### GameManager.java
-Game is launched and set-up here. You may simply call the public static method named "launch" and voila!
-### GameLogic.java
-Controls the game state. Gameloop, win and lose conditions, player inputs... all are handled here.
-### Board.java
-All board-related stuff is done here within Board.java.
-### Tile.java
-Tiles are elements of the board, which is a 2D array of integer values. It holds the data whether "that tile" is a deathspot or not, its coordinates, etc, every detail and every method controlling itself.
-### Radar.java
-As the name suggests, it acts like a radar for the board. If you want to get neighbouring tiles or count neighbouring deathspots, you should refer to Radar class and its static methods.
+It was developed prior to the other project and it is superior!
+## Minesweeper
+Minesweeper was developed after Fortyniner to comply with evaluation form completely (like developing the whole game in a single .java file).
 
-## Further information can be found within the codes, as comments.
+It is more barebones but still has the robust random mine placer algorithm and has its own taste -> instead of mines, it offers you, a civilan, to survive a fallen land of yours thanks to Jitler. Your objective is to discover the safe zones.
+
+## com.gokdenizozkan.util
+This package has my own methods I developed throughout my patika+ programme to date.
+
+They all are written for the sake of solving problems or DRY. The method I love most is the ask() method found in the Input class.
+
+ask() method allows one to
+- ask a question
+- provide options
+- and have a return value in the type of your provided option in a very convenient way!
+
+### Have fun!
