@@ -1,3 +1,4 @@
+package fortyniner;
 public class Radar {
     static int[][] directions = { // No dictionary required, for Radar only cares about deathspot counts, not where the deathspot is.
             { 1, 0 },   // North

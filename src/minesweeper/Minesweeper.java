@@ -12,12 +12,14 @@ public class Minesweeper {
     
     
     public Minesweeper() {
+        // değerlendirme formu 7
         this.enlem = girdiİste("Azami enlemi girin:");
         this.boylam = girdiİste("Azami boylamı girin:");
         hazırla();
         başlat();
     }
     
+    // değerlendirme formu 6
     private void hazırla() {
         harita = new int[enlem][boylam];
         
@@ -25,6 +27,7 @@ public class Minesweeper {
         int bomba = bölgeSayısı / 4;
         güvenliBölgeSayısı = bölgeSayısı - bomba;
         
+        // değerlendirme formu 8
         // bomba atılacak bölgeleri belirle
         Random kader = new Random();
         while (bomba > 0) {
@@ -54,11 +57,13 @@ public class Minesweeper {
         }
     }
     
+ // değerlendirme formu 6
     private void başlat() {
         System.out.println("-------------------\n1'den başlayarak arzu ettiğin bölgenin koordinatını gir!\nGüvenli bölgeleri bul, hayatta kal!\n-------------------");
         int keşfedilenBölgeSayısı = 0;
-        // değerlendirme formu 11
+        // değerlendirme formu 14
         while (keşfedilenBölgeSayısı < güvenliBölgeSayısı) {
+            // değerlendirme formu 11
             haritayıYazdır();
             // değerlendirme formu 9
             int en = girdiİste("Keşfedeceğin enlemi gir:") - 1;
@@ -126,7 +131,8 @@ public class Minesweeper {
         int riskliBölgeSayısı = 0;
         for (int[] yön : yönler) {
             if (haritadaMı(yön)) {
-                riskliBölgeSayısı += harita[yön[0]][yön[1]] == -11 ? 1 : 0; // verilen koordinata bomba düşecek ise riskli bölge sayısını bir artır
+                // verilen koordinata bomba düşecek ise riskli bölge sayısını bir artır
+                riskliBölgeSayısı += harita[yön[0]][yön[1]] == -11 ? 1 : 0;
             }
         }
         return riskliBölgeSayısı;

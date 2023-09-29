@@ -1,3 +1,4 @@
+package fortyniner;
 import com.gokdenizozkan.util.ModifyString;
 import com.gokdenizozkan.util.Tengri;
 

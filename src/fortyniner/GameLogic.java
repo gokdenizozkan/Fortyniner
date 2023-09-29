@@ -1,3 +1,4 @@
+package fortyniner;
 import com.gokdenizozkan.util.Input;
 import com.gokdenizozkan.util.Print;
 
