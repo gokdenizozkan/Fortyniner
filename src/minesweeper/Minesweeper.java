@@ -4,87 +4,87 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Minesweeper {
-    Scanner gir = new Scanner(System.in);
-    int enlem;
-    int boylam;
-    int[][] harita;
-    int güvenliBölgeSayısı;
+    Scanner sc = new Scanner(System.in);
+    int row;
+    int column;
+    int[][] board;
+    int safeZoneCount;
     
     
     public Minesweeper() {
         // değerlendirme formu 7
-        this.enlem = girdiİste("Azami enlemi girin:");
-        this.boylam = girdiİste("Azami boylamı girin:");
-        hazırla();
-        başlat();
+        this.row = getInput("Azami enlemi girin:");
+        this.column = getInput("Azami boylamı girin:");
+        init();
+        loop();
     }
     
     // değerlendirme formu 6
-    private void hazırla() {
-        harita = new int[enlem][boylam];
+    private void init() {
+        board = new int[row][column];
         
-        int bölgeSayısı = enlem * boylam;
-        int bomba = bölgeSayısı / 4;
-        güvenliBölgeSayısı = bölgeSayısı - bomba;
+        int zoneCount = row * column;
+        int riskyZoneCount = zoneCount / 4;
+        safeZoneCount = zoneCount - riskyZoneCount;
         
         // değerlendirme formu 8
-        // bomba atılacak bölgeleri belirle
-        Random kader = new Random();
-        while (bomba > 0) {
+        // riskyZoneCount atılacak bölgeleri belirle
+        Random dice = new Random();
+        while (riskyZoneCount > 0) {
             // rastgele bir koordinat seç
-            int en = kader.nextInt(enlem);
-            int boy = kader.nextInt(boylam);
+            int r = dice.nextInt(row);
+            int c = dice.nextInt(column);
             
-            // seçilen koordinat halihazırda değilse onu bomba atılacak bölge eyle.
-            if (harita[en][boy] != -1) {
-                harita[en][boy] = -11; // -1 bomba demek, 10 eklenmiş hali (-11) keşfedilmediği manasına gelmektedir.
-                bomba--;
+            // seçilen koordinat halihazırda değilse onu riskyZoneCount atılacak bölge eyle.
+            if (board[r][c] != -1) {
+                board[r][c] = -11; // -1 riskyZoneCount demek, 10 eklenmiş hali (-11) keşfedilmediği manasına gelmektedir.
+                riskyZoneCount--;
             }
         }
         
-        // her bomba olmayan bölge için çevresindeki bomba düşecek bölge sayısını hesapla ve ata
+        // her riskyZoneCount olmayan bölge için çevresindeki riskyZoneCount düşecek bölge sayısını hesapla ve ata
         // 10 ekleme ve 10 çıkarma işlemleri, ilgili koordinatın oyuncu tarafından keşfedilip keşfedilmediğini belirtir
         // oyuncu o bölgeyi açarsa ör. 14 olan değer 4'e dönüşecek.
-        for (int en = 0; en < enlem; en++) {
-            for (int boy = 0; boy < boylam; boy++) {
-                // eğer koordinat bomba değilse çevre bölgeleri keşfet ve değerini ata
-                if (harita[en][boy] != -11) harita[en][boy] = çevreBölgeleriKeşfet(en, boy) + 10;
+        for (int r = 0; r < row; r++) {
+            for (int c = 0; c < column; c++) {
+                // eğer koordinat riskyZoneCount değilse çevre bölgeleri keşfet ve değerini ata
+                if (board[r][c] != -11) board[r][c] = checkZones(r, c) + 10;
                 
                 // çözümü ekrana bir kere yazdırmak ve tekrar döngü açmamak için bu döngüden faydalanılmaktadır
-                System.out.print(harita[en][boy] < 0 ? "*  " : harita[en][boy] % 10 + "  ");
+                System.out.print(board[r][c] < 0 ? "*  " : board[r][c] % 10 + "  ");
             }
             System.out.println();
         }
     }
     
  // değerlendirme formu 6
-    private void başlat() {
+    private void loop() {
         System.out.println("-------------------\n1'den başlayarak arzu ettiğin bölgenin koordinatını gir!\nGüvenli bölgeleri bul, hayatta kal!\n-------------------");
-        int keşfedilenBölgeSayısı = 0;
+        int checkedZoneCount = 0;
         // değerlendirme formu 14
-        while (keşfedilenBölgeSayısı < güvenliBölgeSayısı) {
+        while (checkedZoneCount < safeZoneCount) {
             // değerlendirme formu 11
-            haritayıYazdır();
+            printBoard();
             // değerlendirme formu 9
-            int en = girdiİste("Keşfedeceğin enlemi gir:") - 1;
-            int boy = girdiİste("Keşfedeceğin boylamı gir:") - 1;
+            int r = getInput("Keşfedeceğin enlemi gir:") - 1;
+            int c = getInput("Keşfedeceğin boylamı gir:") - 1;
             
             System.out.println(); // bir şeyler daha belirgin gözüksün, yapışık durmasın diye.
             
             // değerlendirme formu 10
-            if (!haritadaMı(new int[]{en, boy})) {
+            if (!isOnBoard(new int[]{r, c})) {
                 System.out.println("Müdahale etmeseydim şu anda uzay boşluğunda yuvarlanıyordun!\nDünya'nın sınırlarını aşmamaya çalışalım, ne dersin?");
                 continue;
             }
             
             // daha önce keşfedilmediyse keşfedilen bölge sayısını bir artırırız
-            if (!keşfedildiMi(en, boy)) keşfedilenBölgeSayısı++; 
+            if (!isChecked(r, c)) checkedZoneCount++;
             // o bölgeyi değersel açıdan da keşfedilmiş kılmak için mod 10 işlemi yaparız
-            harita[en][boy] %= 10;
+            board[r][c] %= 10;
             
             // değerlendirme formu 13
-            if (harita[en][boy] == -1) {
-                haritayıYazdır();
+            if (board[r][c] == -1) {
+                printBoard();
                 System.out.println("Sığınmak için gelmiştin, başına bombalar yağdı.\nNe yapalım, misafir umduğunu değil bulduğunu yermiş.\nÖldün.");
                 return;
             }    
@@ -93,19 +93,18 @@ public class Minesweeper {
         System.out.println("Jitler'in ülkeni getirdiği bu korkunç yeryüzünde hayatta kalmayı başardın.\nKazandın.");
     }
     
-    private int girdiİste(String istem) {
-        System.out.print(istem + " ");
-        int girdi = gir.nextInt();
-        return girdi;
+    private int getInput(String question) {
+        System.out.print(question + " ");
+        return sc.nextInt();
     }
     
-    private void haritayıYazdır() {
-        for (int en = 0; en < enlem; en++) {
-            for (int boy = 0; boy < boylam; boy++) {
+    private void printBoard() {
+        for (int r = 0; r < row; r++) {
+            for (int c = 0; c < column; c++) {
                 // değerlendirme formu 12
-                if (keşfedildiMi(en, boy)) {
+                if (isChecked(r, c)) {
                     System.out.print(
-                            harita[en][boy] == -1 ? "*  " : + harita[en][boy] + "  ");
+                            board[r][c] == -1 ? "*  " : board[r][c] + "  ");
                 }
                 else System.out.print("-  ");
             }
@@ -113,38 +112,38 @@ public class Minesweeper {
         }
     }
     
-    private int çevreBölgeleriKeşfet(int mevcutEnlem, int mevcutBoylam) {
-        int[] kuzey = {mevcutEnlem - 1, mevcutBoylam};
-        int[] güney = {mevcutEnlem + 1, mevcutBoylam};
-        int[] doğu = {mevcutEnlem, mevcutBoylam + 1};
-        int[] batı = {mevcutEnlem, mevcutBoylam - 1};
-        int[] kuzeydoğu = {kuzey[0], doğu[1]};
-        int[] kuzeybatı = {kuzey[0], batı[1]};
-        int[] güneydoğu = {güney[0], doğu[1]};
-        int[] güneybatı = {güney[0], batı[1]};
+    private int checkZones(int mevcutEnlem, int mevcutBoylam) {
+        int[] north = {mevcutEnlem - 1, mevcutBoylam};
+        int[] south = {mevcutEnlem + 1, mevcutBoylam};
+        int[] east = {mevcutEnlem, mevcutBoylam + 1};
+        int[] west = {mevcutEnlem, mevcutBoylam - 1};
+        int[] northeast = {north[0], east[1]};
+        int[] northwest = {north[0], west[1]};
+        int[] southeast = {south[0], east[1]};
+        int[] southwest = {south[0], west[1]};
         
-        int[][] yönler = {
-                kuzey, güney, doğu, batı,
-                kuzeydoğu, kuzeybatı, güneydoğu, güneybatı
+        int[][] directions = {
+                north, south, east, west,
+                northeast, northwest, southeast, southwest
         };
         
-        int riskliBölgeSayısı = 0;
-        for (int[] yön : yönler) {
-            if (haritadaMı(yön)) {
+        int riskyZoneCount = 0;
+        for (int[] direction : directions) {
+            if (isOnBoard(direction)) {
                 // verilen koordinata bomba düşecek ise riskli bölge sayısını bir artır
-                riskliBölgeSayısı += harita[yön[0]][yön[1]] == -11 ? 1 : 0;
+                riskyZoneCount += board[direction[0]][direction[1]] == -11 ? 1 : 0;
             }
         }
-        return riskliBölgeSayısı;
+        return riskyZoneCount;
     }
     
-    private boolean haritadaMı(int[] koordinat) {
-        return koordinat[0] >= 0 && koordinat[0] < enlem && koordinat[1] >= 0 && koordinat[1] < boylam;
+    private boolean isOnBoard(int[] coord) {
+        return coord[0] >= 0 && coord[0] < row && coord[1] >= 0 && coord[1] < column;
     }
     
-    private boolean keşfedildiMi(int en, int boy) {
-        int değer = harita[en][boy];
+    private boolean isChecked(int r, int c) {
+        int value = board[r][c];
         // eğer tek haneli bir sayı değilse bu bölge keşfedilmiştir.
-        return değer >= -1 && değer <= 8;
+        return value >= -1 && value <= 8;
     }
 }

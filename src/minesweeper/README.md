@@ -4,9 +4,9 @@ Yazı tabanlı mayın tarlası klonu.
 # Nasıl çalışır
 Minesweeper.java dosyası içerisinde tüm oyun kurgulanmıştır.
 Constructor içerisinde kullanıcıdan oyun tahtasının büyüklüğünü girmesi istenir.
-Bu bilgiye göre tahta oluşturulmasını sağlamak için hazırla() metodu çağırılır.
+Bu bilgiye göre tahta oluşturulmasını sağlamak için init() metodu çağırılır.
 
-**hazırla()**
+**init()**
 Bu metot içerisinde öncelikle tahtanın değer ataması gerçekleştirilir.
 İkinci adım bomba atılacak, yani mayın yerleştirilecek, bölgelerin belirlenmesidir.
 - Toplam bölge sayısı hesaplanır.
@@ -23,10 +23,10 @@ Buradaki önemli nokta bombanın verisel karşılığı olan "-1"dir. Ancak -1 y
 Bombalar yerleştirildikten sonra sıra kalan diğer bölgelerin çevresindeki riskli bölgeleri (bomba/mayın miktarlarını) hesaplamaya gelir.
 Bu işlem de gerçekleştirildikten sonra hazırla metodu görevini tamamlar.
 
-**başlat()**
+**loop()**
 Tüm oyun döngüsünün gerçekleştiği metottur. Ekrana oyun tahtası yazdırılır ve devamında kullanıcıdan keşfetmek istediği bölge bilgisi istenir.
-- Verilen koordinatın önce *haritadaMı()* olduğu sorgulanır.
-- Haritada ise *keşfedildiMi()* sorgulanır.
+- Verilen koordinatın önce *isOnBoard()* olduğu sorgulanır.
+- Haritada ise *isChecked()* sorgulanır.
 
 Bu sorguları ilgili koordinattaki sayısal değere mod 10 işlemi yaparak veya tek haneli olup olmadığı anlaşılarak cevap bulunur.
 
